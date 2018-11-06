@@ -9,6 +9,7 @@ class MenuController {
         message: "Please choose from the options below: ",
         choices: [
           "Add new contact",
+          "Get current date and time",
           "Exit"
         ]
       }
@@ -29,6 +30,9 @@ class MenuController {
           case "Add new contact":
             this.addContact();
             break;
+          case "Get current date and time":
+            this.getDate();
+            break;
           case "Exit":
             this.exit();
             break;
@@ -40,6 +44,13 @@ class MenuController {
       .catch( ( err ) => {
         console.log( err );
       } );
+  }
+
+  getDate() {
+    this.clear();
+    const now = new Date();
+    console.log( now.toLocaleString() );
+    this.main();
   }
 
   addContact() {
