@@ -1,4 +1,5 @@
 const inquirer = require( "inquirer" );
+const ContactController = require( "./ContactController.js" );
 
 class MenuController {
   constructor() {
@@ -13,7 +14,7 @@ class MenuController {
         ]
       }
     ];
-    this.contacts = [];
+    this.book = new ContactController();
   }
 
   clear() {
@@ -44,17 +45,23 @@ class MenuController {
 
   addContact() {
     this.clear();
-    console.log( "Contact added" );
-    this.main();
+    inquirer.prompt( this.book.addContactQuestions )
+      .then( ( response ) => {
+        this.book.addContact( response.name, response.phone )
+          .then( ( contact ) => {
+            console.log( `Contact [${ contact.name }] added successfully!` );
+            this.main();
+          } );
+      } )
+      .catch( ( err ) => {
+        console.log( err );
+        this.main();
+      } );
   }
 
   exit() {
     console.log( "Thank you for using AddressBloc!" );
     process.exit();
-  }
-
-  getContactCount() {
-    return this.contacts.length;
   }
 }
 
