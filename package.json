@@ -4,12 +4,23 @@
   "description": "An application to model an address book in Node",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "export NODE_ENV=test && jasmine"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "inquirer": "^6.2.0"
-  }
+  },
+  "devDependencies": {
+    "jasmine": "^3.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/finnwhite/bloc.io_wdt_address-bloc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/finnwhite/bloc.io_wdt_address-bloc/issues"
+  },
+  "homepage": "https://github.com/finnwhite/bloc.io_wdt_address-bloc#readme"
 }
