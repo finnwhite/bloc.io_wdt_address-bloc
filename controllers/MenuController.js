@@ -47,9 +47,13 @@ class MenuController {
     this.clear();
     inquirer.prompt( this.book.addContactQuestions )
       .then( ( response ) => {
-        this.book.addContact( response.name, response.phone )
+        this.book.addContact(
+          response.name,
+          response.phone,
+          response.email
+          )
           .then( ( contact ) => {
-            console.log( `Contact [${ contact.name }] added successfully!` );
+            console.log( `Contact [${ contact.name }] added successfully!\n` );
             this.main();
           } );
       } )
