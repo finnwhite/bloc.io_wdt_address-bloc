@@ -10,6 +10,7 @@ class MenuController {
         message: "Please choose from the options below: ",
         choices: [
           "Add new contact",
+          "View all contacts",
           "Exit"
         ]
       }
@@ -29,6 +30,9 @@ class MenuController {
         switch ( response.mainMenuChoice ) {
           case "Add new contact":
             this.addContact();
+            break;
+          case "View all contacts":
+            this.getContacts();
             break;
           case "Exit":
             this.exit();
@@ -63,8 +67,33 @@ class MenuController {
       } );
   }
 
+  getContacts() {
+    this.clear();
+    this.book.getContacts()
+    .then( ( contacts ) => {
+      /*
+        for ( let contact in contacts ) { ... }
+        not working, contact is index not value
+      */
+      for ( let contact, i = 0; i < contacts.length; i++ ) {
+        contact = contacts[ i ];
+        console.log(
+          `  name: ${ contact.name }\n` +
+          `  phone number: ${ contact.phone }\n` +
+          `  email: ${ contact.email }\n` +
+          `  ---------------\n`
+        );
+      }
+      this.main();
+    } )
+    .catch( ( err ) => {
+      console.log( err );
+      this.main();
+    } );
+  }
+
   exit() {
-    console.log( "Thank you for using AddressBloc!" );
+    console.log( "Thank you for using AddressBloc!\n" );
     process.exit();
   }
 }

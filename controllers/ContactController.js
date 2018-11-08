@@ -1,4 +1,3 @@
-//const inquirer = require( "inquirer" );
 const Contact = require( "../db/models" ).Contact;
 
 class ContactController {
@@ -35,6 +34,11 @@ class ContactController {
   addContact( name, phone, email ) {
     return Contact.create( { name, phone, email } );
   }
+
+  getContacts() {
+    return Contact.findAll();
+  }
+
 }
 
 module.exports = ContactController;
