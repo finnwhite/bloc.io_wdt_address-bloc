@@ -28,6 +28,16 @@ class ContactController {
         }
       }
     ];
+    this.searchQuestions = [
+      {
+        type: "input",
+        name: "name",
+        message: "Name of contact to find - ",
+        validate( val ) {
+          return ( val !== "" );
+        }
+      }
+    ];
     this.contacts = [];
   }
 

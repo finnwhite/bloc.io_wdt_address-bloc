@@ -11,6 +11,7 @@ class MenuController {
         choices: [
           "Add new contact",
           "View all contacts",
+          "Search for contact",
           "Exit"
         ]
       }
@@ -33,6 +34,9 @@ class MenuController {
             break;
           case "View all contacts":
             this.getContacts();
+            break;
+          case "Search for contact":
+            this.search();
             break;
           case "Exit":
             this.exit();
@@ -72,12 +76,7 @@ class MenuController {
     this.book.getContacts()
     .then( ( contacts ) => {
       for ( let contact of contacts ) {
-        console.log(
-          `  name: ${ contact.name }\n` +
-          `  phone number: ${ contact.phone }\n` +
-          `  email: ${ contact.email }\n` +
-          `  ---------------\n`
-        );
+        this._printContact( contact );
       }
       this.main();
     } )
@@ -85,6 +84,40 @@ class MenuController {
       console.log( err );
       this.main();
     } );
+  }
+
+  search() {
+    inquirer.prompt( this.book.searchQuestions )
+    .then( ( response ) => {
+      this.book.search( response.name )
+      .then( ( contact ) => {
+        if ( contact === null ) {
+          //this.clear();
+          console.log( `Contact not found.\n` );
+          this.search();
+        } else {
+          this.showContact( contact );
+        }
+      } );
+    } )
+    .catch( ( err ) => {
+      console.log( err );
+      this.main();
+    } );
+  }
+
+  showContact( contact ) {
+    this._printContact( contact );
+    this.main();
+  }
+
+  _printContact( contact ) {
+    console.log(
+      `  name: ${ contact.name }\n` +
+      `  phone number: ${ contact.phone }\n` +
+      `  email: ${ contact.email }\n` +
+      `  ---------------\n`
+    );
   }
 
   exit() {
