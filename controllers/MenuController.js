@@ -87,14 +87,16 @@ class MenuController {
   }
 
   search() {
+    this.clear(); // ADDED for consistency with add() and get()
     inquirer.prompt( this.book.searchQuestions )
     .then( ( response ) => {
       this.book.search( response.name )
       .then( ( contact ) => {
         if ( contact === null ) {
-          //this.clear();
-          console.log( `Contact not found.\n` );
-          this.search();
+          //this.clear(); // DISABLED for consistency with add() and get()
+          console.log( `Contact [${ response.name }] not found.\n` );
+          //this.search(); // trapped in loop if can't find contact or empty
+          this.main();
         } else {
           this.showContact( contact );
         }
@@ -108,7 +110,50 @@ class MenuController {
 
   showContact( contact ) {
     this._printContact( contact );
-    this.main();
+
+    inquirer.prompt( this.book.showContactQuestions )
+    .then( ( response ) => {
+      switch ( response.selected ) {
+        case "Delete contact":
+          this.delete( contact );
+          break;
+        case "Main menu":
+          this.clear();
+          this.main();
+          break;
+        default:
+          console.log( "Invalid input" );
+          this.showContact( contact );
+      }
+    } )
+    .catch( ( err ) => {
+      console.log( err );
+      this.showContact( contact );
+    } );
+  }
+
+  delete( contact ) {
+    inquirer.prompt( this.book.deleteConfirmQuestions )
+    .then( ( response ) => {
+      if ( response.confirmation ) {
+        this.book.delete( contact.id )
+        .then( () => {
+          console.log( `Contact [${ contact.name }] deleted successfully.\n` );
+          this.main();
+        } )
+        .catch( ( err ) => {
+          console.log( err );
+          this.main();
+        } );
+      } else {
+        console.log( `Contact [${ contact.name }] NOT deleted.\n` );
+        this.showContact( contact );
+      }
+    } )
+    .catch( ( err ) => {
+      console.log( err );
+      this.main();
+    } );
   }
 
   _printContact( contact ) {
