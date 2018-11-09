@@ -71,12 +71,7 @@ class MenuController {
     this.clear();
     this.book.getContacts()
     .then( ( contacts ) => {
-      /*
-        for ( let contact in contacts ) { ... }
-        not working, contact is index not value
-      */
-      for ( let contact, i = 0; i < contacts.length; i++ ) {
-        contact = contacts[ i ];
+      for ( let contact of contacts ) {
         console.log(
           `  name: ${ contact.name }\n` +
           `  phone number: ${ contact.phone }\n` +
