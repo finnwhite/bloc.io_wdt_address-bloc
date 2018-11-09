@@ -206,6 +206,51 @@ describe( "ContactController", () => {
     } );
     /* ----- ContactController.binarySearch() ----- */
 
+
+    /* ===== ContactController.search() using ORM ===== */
+
+    describe( "#search() using ORM", () => {
+
+      it( "should return null when a contact was not found",
+        ( done ) => {
+          this.book.addContact( ...zelda )
+          .then( () => {
+            this.book.search( snake[ 0 ] )
+            .then( ( contact ) => {
+              expect( contact ).toBeNull();
+              done();
+            } )
+            .catch( ( err ) => {
+              console.log( err );
+              done();
+            } );
+          } );
+        }
+      );
+
+      it( "should return the contact when found",
+        ( done ) => {
+          this.book.addContact( ...snake )
+          .then( () => {
+            this.book.search( snake[ 0 ] )
+            .then( ( contact ) => {
+              expect( contact ).not.toBeNull();
+              expect( contact.name ).toBe( snake[ 0 ] );
+              expect( contact.phone ).toBe( snake[ 1 ] );
+              expect( contact.email ).toBe( snake[ 2 ] );
+              done();
+            } )
+            .catch( ( err ) => {
+              console.log( err );
+              done();
+            } );
+          } );
+        }
+      );
+
+    } );
+    /* ----- ContactController.search() using ORM ----- */
+
   } );
   /* ----- ContactController.[ search methods ] ----- */
 
