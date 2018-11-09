@@ -73,9 +73,9 @@ describe( "ContactController", () => {
   } );
 
 
-  /* ===== ContactController.iterativeSearch() ===== */
+  /* ===== ContactController.[ search methods ] ===== */
 
-  describe( "#iterativeSearch()", () => {
+  describe( "#[ search methods ]", () => {
 
     /* test values */
     const zelda = ["Zelda Smith", "000-100-111", "zelda@nintendo.com"];
@@ -83,42 +83,25 @@ describe( "ContactController", () => {
     const magus = ["Magus Johnson", "101-010-101", "magus@squaresoft.com"];
     const alloy = ["Alloy Rodriguez", "111-111-111", "allow@guerrilla-games.com"];
 
-    it( "should return null when called with an empty array",
-      () => {
-        expect( this.book.iterativeSearch( [], alloy[ 0 ] ) ).toBeNull();
-      }
-    );
 
-    it( "should return null when contact is not found",
-      ( done ) => {
-        this.book.addContact( ...zelda )
-        .then( () => {
-          this.book.getContacts()
-          .then( ( contacts ) => {
-            expect( this.book.iterativeSearch( contacts, alloy[ 0 ] )
-            ).toBeNull();
-            done();
-          } )
-          .catch( ( err ) => {
-            console.log( err );
-            done();
-          } );
-        } );
-      }
-    );
+    /* ===== ContactController.iterativeSearch() ===== */
 
-    it( "should return the contact if found",
-      ( done ) => {
-        this.book.addContact( ...alloy )
-        .then( () => {
-          this.book.addContact( ...magus )
+    describe( "#iterativeSearch()", () => {
+
+      it( "should return null when called with an empty array",
+        () => {
+          expect( this.book.iterativeSearch( [], alloy[ 0 ] ) ).toBeNull();
+        }
+      );
+
+      it( "should return null when contact is not found",
+        ( done ) => {
+          this.book.addContact( ...zelda )
           .then( () => {
             this.book.getContacts()
             .then( ( contacts ) => {
-              let contact = this.book.iterativeSearch( contacts, magus[ 0 ] );
-              expect( contact.name ).toBe( magus[ 0 ] );
-              expect( contact.phone ).toBe( magus[ 1 ] );
-              expect( contact.email ).toBe( magus[ 2 ] );
+              expect( this.book.iterativeSearch( contacts, alloy[ 0 ] )
+              ).toBeNull();
               done();
             } )
             .catch( ( err ) => {
@@ -126,11 +109,104 @@ describe( "ContactController", () => {
               done();
             } );
           } );
+        }
+      );
+
+      it( "should return the contact if found",
+        ( done ) => {
+          this.book.addContact( ...alloy ).then( () => {
+            this.book.addContact( ...magus ).then( () => {
+              this.book.getContacts()
+              .then( ( contacts ) => {
+                let contact = this.book.iterativeSearch( contacts, magus[ 0 ] );
+                expect( contact.name ).toBe( magus[ 0 ] );
+                expect( contact.phone ).toBe( magus[ 1 ] );
+                expect( contact.email ).toBe( magus[ 2 ] );
+                done();
+              } )
+              .catch( ( err ) => {
+                console.log( err );
+                done();
+              } );
+            } );
+          } );
+        }
+      );
+
+    } );
+    /* ----- ContactController.iterativeSearch() ----- */
+
+
+    /* ===== ContactController.binarySearch() ===== */
+
+    describe( "#binarySearch()", () => {
+
+      /* helper function */
+      function sort( contacts ) {
+        return contacts.sort( ( a, b ) => {
+          nameA = a.name.toLowerCase();
+          nameB = b.name.toLowerCase();
+          if ( nameA > nameB ) { return 1; }
+          else if ( nameA < nameB ) { return -1; }
+          else { return 0; }
         } );
       }
-    );
+
+      it( "should return null when called with an empty array",
+        () => {
+          expect( this.book.binarySearch( [], alloy[ 0 ] ) ).toBeNull();
+        }
+      );
+
+      it( "should return null when contact is not found",
+        ( done ) => {
+          this.book.addContact( ...zelda )
+          .then( () => {
+            this.book.getContacts()
+            .then( ( contacts ) => {
+              expect( this.book.binarySearch( sort( contacts ), alloy[ 0 ] )
+              ).toBeNull();
+              done();
+            } )
+            .catch( ( err ) => {
+              console.log( err );
+              done();
+            } );
+          } );
+        }
+      );
+
+      it( "should return the contact if found",
+        ( done ) => {
+          this.book.addContact( ...alloy ).then( () => {
+            this.book.addContact( ...magus ).then( () => {
+              this.book.addContact( ...zelda ).then( () => {
+                this.book.addContact( ...snake ).then( () => {
+                  this.book.getContacts()
+                  .then( ( contacts ) => {
+                    let contact = this.book.binarySearch(
+                      sort( contacts ), magus[ 0 ]
+                    );
+                    expect( contact.name ).toBe( magus[ 0 ] );
+                    expect( contact.phone ).toBe( magus[ 1 ] );
+                    expect( contact.email ).toBe( magus[ 2 ] );
+                    done();
+                  } )
+                  .catch( ( err ) => {
+                    console.log( err );
+                    done();
+                  } );
+                } );
+              } );
+            } );
+          } );
+        }
+      );
+
+    } );
+    /* ----- ContactController.binarySearch() ----- */
 
   } );
-  /* ----- ContactController.iterativeSearch() ----- */
+  /* ----- ContactController.[ search methods ] ----- */
 
 } );

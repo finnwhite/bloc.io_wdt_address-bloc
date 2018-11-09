@@ -48,6 +48,23 @@ class ContactController {
     return null;
   }
 
+  binarySearch( contacts, target ) {
+    let min = 0;
+    let max = contacts.length - 1;
+    let mid, contact, name;
+    const targetName = target.toLowerCase();
+
+    while ( min <= max ) {
+      mid = Math.floor( ( min + max ) / 2 );
+      contact = contacts[ mid ];
+      name = contact.name.toLowerCase();
+      if ( name > targetName ) { max = mid - 1; }
+      else if ( name < targetName ) { min = mid + 1; }
+      else { return contact; }
+    }
+    return null;
+  }
+
 }
 
 module.exports = ContactController;
