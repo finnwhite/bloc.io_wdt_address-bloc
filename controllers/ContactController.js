@@ -79,6 +79,10 @@ class ContactController {
     return Contact.findOne( { where: { name } } );
   }
 
+  delete( id ) {
+    return Contact.destroy( { where: { id } } );
+  }
+
 }
 
 module.exports = ContactController;
